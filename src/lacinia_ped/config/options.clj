@@ -5,8 +5,4 @@
 
 (defstate env
   :start
-  (load-config
-    :merge
-    [(args)
-     (source/from-system-props)
-     (source/from-env)]))
+  (load-config))

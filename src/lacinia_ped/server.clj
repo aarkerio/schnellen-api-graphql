@@ -1,13 +1,25 @@
 (ns lacinia-ped.server
   (:gen-class) ; for -main method in uberjar
-  (:require [io.pedestal.http :as server]
+  (:require [com.walmartlabs.lacinia.pedestal :as lacinia]
+            [com.walmartlabs.lacinia.schema :as schema]
+            [io.pedestal.http :as server]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.route.definition.table :refer [table-routes]] ; <-- new
-            [lacinia-ped.service :as service]))
+            [lacinia-ped.db.core :as db]
+            [lacinia-ped.service :as service]
+            [mount.core :as mount]))
+
+(def hello-schema (schema/compile
+                   {:queries {:hello
+                              ;; String is quoted here; in EDN the quotation is not required
+                              {:type 'String
+                               :resolve (constantly "world")}}}))
+
+(def service (lacinia/service-map hello-schema {:graphiql true}))
 
 ;; This is an adapted service map, that can be started and stopped
 ;; From the REPL you can call server/start and server/stop on this service
-(defonce runnable-service (server/create-server service/service))
+(defonce runnable-service (server/create-server service))
 
 (defn run-dev
   "The entry-point for 'lein run-dev'"
@@ -34,6 +46,8 @@
   "The entry-point for 'lein run'"
   [& args]
   (println "\nCreating your server...")
+  (mount/start #'lacinia-ped.config.options/env)
+  (mount.core/stop #'db/*db*)
   (server/start runnable-service))
 
 ;; If you package the service up as a WAR,

@@ -3,7 +3,7 @@
     [cheshire.core :refer [generate-string parse-string]]
     [clj-time.jdbc]
     [clojure.java.jdbc :as jdbc]
-    [clojure.tools.logging :as log]
+    [io.pedestal.log :as log]
     [conman.core :as conman]
     [lacinia-ped.config.options :refer [env]]
     [mount.core :refer [defstate]])
@@ -19,7 +19,7 @@
   :start (if-let [jdbc-url (env :database-url)]
            (conman/connect! {:jdbc-url jdbc-url})
            (do
-             (log/warn "database connection URL was not found, please set :database-url in your config, e.g: dev-config.edn")
+             (log/warn :msg "database connection URL was not found, please set :database-url in your config, e.g: dev-config.edn")
              *db*))
   :stop (conman/disconnect! *db*))
 
