@@ -26,7 +26,7 @@
   ;; If you use HTTP/2 or ALPN, use the java-agent to pull in the correct alpn-boot dependency
   ;:java-agents [[org.mortbay.jetty.alpn/jetty-alpn-agent "2.0.5"]]
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "lacinia-ped.server/run-dev"]}
-                   :repl-options {:port 7000}
+                   :repl-options {:port 8000}
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.5"]]}
              :uberjar {:aot [lacinia-ped.server]}}
   :main ^{:skip-aot true} lacinia-ped.server)
