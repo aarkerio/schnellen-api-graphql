@@ -24,10 +24,10 @@
   :resource-paths ["config", "resources"]
   ;; If you use HTTP/2 or ALPN, use the java-agent to pull in the correct alpn-boot dependency
   ;:java-agents [[org.mortbay.jetty.alpn/jetty-alpn-agent "2.0.5"]]
-  :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "lacinia-ped.server/run-dev"]}
+  :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "lacinia-ped.server/-main"]}
                    :jvm-opts ["-Dconf=dev-config.edn"]
                    :repl-options {:port 8000
-                                  :init-ns lacinia-ped.server
+                                  :init-ns user
                                   ;; If nREPL takes too long to load it may timeout,
                                   ;; increase this to wait longer before timing out.
                                   ;; Defaults to 30000 (30 seconds)
