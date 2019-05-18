@@ -31,11 +31,12 @@
                                   ;; If nREPL takes too long to load it may timeout,
                                   ;; increase this to wait longer before timing out.
                                   ;; Defaults to 30000 (30 seconds)
-                                  :timeout 120000
+                                  :timeout 1200000000
                                   } ;; /project/dev ends
 
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.5"]
-                                  ]}
+                                  [reloaded.repl "0.2.4"]]
+                   }
              :uberjar {:aot [lacinia-ped.server]
                        :uberjar-name "zentaur-api-prod-standalone.jar"}
              }

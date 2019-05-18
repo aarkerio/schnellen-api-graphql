@@ -30,7 +30,8 @@
                         :description "Access a test by its unique id, if it exists."
                         :args {
                                :id {:type ID}
-                              }
-                        :resolve :test-by-id }
+                               }
+                        :resolve :test-by-id
+                        }
            }
 }
