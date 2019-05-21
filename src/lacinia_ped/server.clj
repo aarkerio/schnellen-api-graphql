@@ -22,5 +22,8 @@
 
 (defn new-server
   []
+  (println "\nCreating your server...")
+  (mount/start #'lacinia-ped.config.options/env)
+  (mount.core/start #'db/*db*)
   {:server (component/using (map->Server {})
                             [:schema-provider])})

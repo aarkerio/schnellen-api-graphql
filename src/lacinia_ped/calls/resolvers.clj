@@ -8,14 +8,15 @@
   "get and convert to map keyed"
   [context args value]
   (let [test-id   (args :id)
-        questions (db/get-questions { :test-id test-id })]
+        questions (db/get-questions { :id test-id })]
     questions))
 
 (defn- ^:private resolve-test-by-id
   [context args value]
   (let [_       (log/info :msg (str ">>>  ARGS  >>>>> " args))
-        test-id (args :id)]
-    (db/get-one-test {:id test-id})))
+        test-id (:id args)
+        id      (Integer/parseInt test-id)]
+    (db/get-one-test {:id id})))
 
 (defn resolver-map
   [component]
