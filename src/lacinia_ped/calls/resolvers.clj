@@ -7,16 +7,16 @@
 (defn- ^:private resolver-get-questions-by-test
   "get and convert to map keyed"
   [context args value]
-  (let [test-id   (args :id)
-        questions (db/get-questions { :id test-id })]
-    questions))
+  (let [test-id (:id args)
+        id      (Integer/parseInt test-id)]
+    (log/info :msg (str ">>> PARAM >>>>> " (db/get-questions { :test-id id })))
+    (db/get-questions { :test-id id })))
 
 (defn- ^:private resolve-test-by-id
   [context args value]
-  (let [_       (log/info :msg (str ">>>  ARGS  >>>>> " args))
-        test-id (:id args)
+  (let [test-id (:id args)
         id      (Integer/parseInt test-id)]
-    (db/get-one-test {:id id})))
+    (db/get-one-test { :id id })))
 
 (defn resolver-map
   [component]

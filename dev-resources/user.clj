@@ -3,6 +3,7 @@
             [clojure.walk :as walk]
             [com.stuartsierra.component :as component]
             [com.walmartlabs.lacinia :as lacinia]
+            [com.walmartlabs.lacinia.pedestal :as lp]
             [lacinia-ped.system :as system])
   (:import (clojure.lang IPersistentMap)))
 

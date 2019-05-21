@@ -153,7 +153,8 @@ SELECT * FROM tests WHERE id = :id
 
 -- :name get-questions :? :*
 -- :doc retrieve all questions tests.
-SELECT q.*, qt.ordnen FROM question_tests AS qt, questions AS q WHERE qt.test_id = :test-id AND qt.question_id=q.id ORDER BY qt.ordnen ASC
+SELECT q.id, q.user_id, q.question, q.qtype, q.hint, q.explanation, q.active, qt.ordnen FROM question_tests AS qt, questions AS q
+WHERE qt.test_id = :test-id AND qt.question_id=q.id ORDER BY qt.ordnen ASC
 
 -- :name get-last-question :? :1
 -- :doc retrieve all questions tests.
