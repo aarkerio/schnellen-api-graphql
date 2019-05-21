@@ -30,3 +30,4 @@
   "Called by system.clj"
   []
   {:schema-provider (map->SchemaProvider {})})
+

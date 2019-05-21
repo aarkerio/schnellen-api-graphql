@@ -4,19 +4,20 @@
             [io.pedestal.log :as log]
             [lacinia-ped.db.core :as db]))
 
-(defn resolve-test-by-id
-  [tests-map context args value]
-  (let [{:keys [id]} args
-        _ (log/info :msg (str ">>> TSTS KKKKKKKKKKKKKKKKKKKKKK EDN >>>>> " id))]
-    (get tests-map id)))
+(defn- ^:private resolver-get-questions-by-test
+  "get and convert to map keyed"
+  [context args value]
+  (let [test-id   (args :id)
+        questions (db/get-questions { :test-id test-id })]
+    questions))
+
+(defn- ^:private resolve-test-by-id
+  [context args value]
+  (let [_       (log/info :msg (str ">>>  ARGS  >>>>> " args))
+        test-id (args :id)]
+    (db/get-one-test {:id test-id})))
 
 (defn resolver-map
   [component]
-  (let [cgg-data (-> (io/resource "cgg-data.edn")
-                     slurp
-                     edn/read-string)
-        test-map (->> cgg-data
-                       :tests
-                       (reduce #(assoc %1 (:id %2) %2) {}))]
-    (log/info :msg (str ">>> TSTS 33 77777777777777777 EDN >>>>> " test-map))
-    {:test-by-id (partial resolve-test-by-id test-map)}))
+  {:test-by-id (partial resolve-test-by-id)
+   :questions-by-test (partial resolver-get-questions-by-test)})

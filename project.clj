@@ -27,6 +27,7 @@
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "lacinia-ped.server/-main"]}
                    :jvm-opts ["-Dconf=dev-config.edn"]
                    :repl-options {:port 8000
+                                  :resource-paths ["dev-resources"]
                                   :init-ns user
                                   ;; If nREPL takes too long to load it may timeout,
                                   ;; increase this to wait longer before timing out.
@@ -35,6 +36,7 @@
                                   } ;; /project/dev ends
 
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.5"]
+                                  [nrepl "0.6.0"]                         ;; REPL that provides a server and client
                                   [reloaded.repl "0.2.4"]]
                    }
              :uberjar {:aot [lacinia-ped.server]
