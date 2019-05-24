@@ -14,6 +14,7 @@
     (assoc this :server (-> schema-provider
                             :schema
                             (lacinia/service-map {:graphiql true})
+                            (merge {::http/allowed-origins "http://localhost:3000"})
                             http/create-server
                             http/start)))
   (stop [this]
