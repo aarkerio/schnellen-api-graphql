@@ -30,11 +30,16 @@
            :question {
                       :description "Question schema."
                       :fields {
-                               :id          {:type (non-null Int)}
-                               :question    {:type (non-null String)}
-                               :qtype       {:type Int}
-                               :hint        {:type String}
-                               :explanation {:type String}
+                               :id            {:type (non-null Int)}
+                               :question      {:type (non-null String)}
+                               :qtype         {:type Int}
+                               :hint          {:type String}
+                               :explanation   {:type String}
+                               :ordnen        {:type Int}
+                               :user_id       {:type Int}
+                               :created_at    {:type String}
+                               :reviewed_fact {:type Boolean}
+                               :reviewed_lang {:type Boolean}
                                }}}
 
  :queries {
