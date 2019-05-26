@@ -7,9 +7,10 @@
                  [cprop "0.1.13"]                        ;; likes properties, environments, configs, profiles...
                  [ch.qos.logback/logback-classic "1.2.3" :exclusions [org.slf4j/slf4j-api]]
                  [cheshire "5.8.1"]                      ;; Clojure JSON and BSON encoding/decoding
-                 [clj-time "0.14.0"]                     ;; date time-zone library
+                 [clj-time "0.15.0"]                     ;; date time-zone library
                  [com.walmartlabs/lacinia "0.33.0-alpha-3"]  ;; Graphql in Clojure
                  [com.walmartlabs/lacinia-pedestal "0.12.0-alpha-1"] ;; Expose Lacinia GraphQL as Pedestal endpoints
+                 [funcool/struct "1.3.0"]                ;; database validation
                  [io.pedestal/pedestal.service "0.5.5"]
                  [io.pedestal/pedestal.jetty "0.5.5"]
                  [mount "0.1.16"]                        ;; managing Clojure and ClojureScript app state
