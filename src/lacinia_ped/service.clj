@@ -5,6 +5,7 @@
             [io.pedestal.http.route :as route]
             [io.pedestal.http.route.definition.table :refer [table-routes]]
             [io.pedestal.http.body-params :as body-params]
+            [lacinia-ped.db.core :as db]
             [ring.util.response :as ring-resp]))
 
 (defn about-page
@@ -14,12 +15,14 @@
                               (route/url-for ::about-page))))
 (defn prro-page
   [request]
-  (log/info :msg (str ">>> PARAM QUERY PARAMS JJJ PERRO!!!! >>>>> " (request :query-params)))
-  (let [nm (get-in request [:query-params :team])]
-    (ring-resp/response (format "Cool Clojure %s - served from %s and team %s"
+  (let [nm    (get-in request [:query-params :team])
+        post  (db/get-post {:id 9})
+        _     (log/info :msg (str ">>> POST TITLE >>>>> "  (:title post)))]
+    (ring-resp/response (format "Cool Clojure %s - served from %s and team %s ans post %s"
                                 (clojure-version)
                                 (route/url-for ::prro-page)
-                                nm))))
+                                nm
+                                (post :title)))) )
 
 (defn home-page
   [request]

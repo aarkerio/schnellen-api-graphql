@@ -1,0 +1,54 @@
+{
+ :enums {
+         :episode {:description "The episodes of the original Star Wars trilogy."
+                   :values [:NEWHOPE :EMPIRE :JEDI]}
+         :question_type {:description "Question options"
+                   :values [:CLOSED :OPTIONS :OPEN :COLUMNS]}}
+ :interfaces {
+              :character {
+                          :fields {:id         {:type String}
+                                   :name       {:type String}
+                                   :appears_in {:type (list :episode)}
+                                   :friends    {:type (list :character)}}}}
+ :objects {
+           :droid {
+                   :fields {:primary_functions {:type (list String)}
+                            :id {:type Int}
+                            :name {:type String}
+                            :appears_in {:type (list :episode)}}}
+           :test     {
+                      :description "Tests schema."
+                      :fields {
+                               :id           {:type (non-null ID)}
+                               :title        {:type (non-null String)}
+                               :user_id      {:type Int}
+                               :description  {:type (non-null String)}
+                               :instructions {:type Int}
+                               :level        {:type Int}
+                               :active       {:type Boolean}
+                               :shared       {:type Boolean}}}
+           :question {
+                      :description "Question schema."
+                      :fields {
+                               :id            {:type (non-null Int)}
+                               :question      {:type (non-null String)}
+                               :qtype         {:type Int}
+                               :hint          {:type String}
+                               :explanation   {:type String}
+                               :ordnen        {:type Int}
+                               :user_id       {:type Int}
+                               :created_at    {:type String}
+                               :reviewed_fact {:type Boolean}
+                               :reviewed_lang {:type Boolean}
+                               }}}
+
+ :queries {
+           :test_by_id {:type (non-null :test)
+                        :description "Access a test by its unique id, if it exists."
+                        :args {:id {:type ID}}
+                        :resolve :test-by-id}
+           :questions_by_test {:type  (list :question)
+                               :description "Access a test's questions by its unique id, if it exists."
+                               :args {:id {:type ID}}
+                               :resolve :questions-by-test}}
+}

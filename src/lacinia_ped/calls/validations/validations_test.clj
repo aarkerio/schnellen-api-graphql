@@ -1,0 +1,18 @@
+(ns lacinia-ped.calls.validations.validations-test
+  (:require [clj-time.local :as l]
+            [io.pedestal.log :as log]
+            [struct.core :as st]))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;;    VALIDATIONS    NIL == all is fine!!
+;;;;;;;;;;;;;;;;;;;;;
+
+(def test-schema
+  [[:user-id st/required st/integer]
+   [:title   st/required st/string
+     {:title "Title field must contain at least 2 characters"
+      :validate #(> (count %) 2)}]])
+
+(defn validate-test [params]
+  (first
+    (st/validate params test-schema)))
