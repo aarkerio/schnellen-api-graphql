@@ -14,30 +14,24 @@
       (db/create-minimal-test! full-params)
       {:flash errors})))
 
-(defn- ^:private get-answers [question]
+(defn- ^:private get-answers
+  "Get the answers for each question"
+  [question]
   (let [answers          (db/get-answers {:question-id (:id question)})
         keys-answers     (map #(assoc % :key (str "keyed-" (:id %))) answers)
         question-updated (update question :created_at #(helpers/format-time %))]
     (assoc question-updated :answers keys-answers)))
 
-(defn- ^:private get-questions
-  "get and convert to map keyed"
-  [test-id]
-  (let [questions  (db/get-questions { :test-id test-id })
-        index-seq  (map #(% :id) questions)]
+(defn- ^:private resolver-get-questions-by-test
+  "Resolver to get and convert to map keyed"
+  [context args value]
+  (let [pre-test-id  (:id args)
+        test-id      (Integer/parseInt pre-test-id)
+        questions    (db/get-questions { :test-id test-id })
+        index-seq    (map #(% :id) questions)]  ;; extract sequence
         (->> questions
              (map get-answers)
-             (zipmap index-seq)  ;; add the index
-             )))
-
-
-(defn- ^:private resolver-get-questions-by-test
-  "get and convert to map keyed"
-  [context args value]
-  (let [test-id (:id args)
-        id      (Integer/parseInt test-id)]
-    (log/info :msg (str ">>> PARAM >>>>> " (db/get-questions { :test-id id })))
-    (db/get-questions { :test-id id })))
+             (zipmap index-seq))))  ;; add the index
 
 (defn- ^:private resolve-test-by-id
   [context args value]

@@ -5,7 +5,8 @@
             [lacinia-ped.db.core :as db]
             [lacinia-ped.api.schema :as schema]
             [lacinia-ped.service :as service]
-            [mount.core :as mount]))
+            [mount.core :as mount])
+  (:gen-class))
 
 (defrecord Server [schema-provider server]
 
