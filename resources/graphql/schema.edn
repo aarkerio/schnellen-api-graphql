@@ -18,7 +18,7 @@
                                :title        {:type (non-null String)}
                                :user_id      {:type Int}
                                :description  {:type (non-null String)}
-                               :instructions {:type Int}
+                               :instructions {:type String}
                                :level        {:type Int}
                                :active       {:type Boolean}
                                :shared       {:type Boolean}
