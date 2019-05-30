@@ -22,7 +22,7 @@
                                 (clojure-version)
                                 (route/url-for ::prro-page)
                                 nm
-                                (post :title)))) )
+                                (post :title)))))
 
 (defn home-page
   [request]

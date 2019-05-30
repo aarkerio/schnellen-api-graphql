@@ -1,11 +1,13 @@
 (ns lacinia-ped.server
   (:require [io.pedestal.http :as http]
+            [io.pedestal.log :as log]
             [com.stuartsierra.component :as component]
             [com.walmartlabs.lacinia.pedestal :as lacinia]
             [lacinia-ped.db.core :as db]
             [lacinia-ped.api.schema :as schema]
             [lacinia-ped.service :as service]
-            [mount.core :as mount]))
+            [mount.core :as mount])
+  (:gen-class))
 
 (defrecord Server [schema-provider server]
 
@@ -14,7 +16,7 @@
     (assoc this :server (-> schema-provider
                             :schema
                             (lacinia/service-map {:graphiql true})
-                            (merge {::http/allowed-origins (constantly true)})
+                            (merge {::http/allowed-origins (constantly true)})  ;; CORS
                             http/create-server
                             http/start)))
   (stop [this]

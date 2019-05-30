@@ -2,9 +2,10 @@
   (:require
     [com.stuartsierra.component :as component]
     [lacinia-ped.api.schema :as schema]
-    [lacinia-ped.server :as server]))
+    [lacinia-ped.server :as server])
+  (:gen-class))
 
-(defn new-system
+(defn -main
   []
   (merge (component/system-map)
          (server/new-server)

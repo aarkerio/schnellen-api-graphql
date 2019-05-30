@@ -13,9 +13,9 @@
 
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <!-- rollover daily -->
-      <fileNamePattern>logs/lacinia-ped-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>logs/the-next-big-server-side-thing-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <!-- or whenever the file size reaches 64 MB -->
-      <maxFileSize>64 MB</maxFileSize>
+      <maxFileSize>164 MB</maxFileSize>
     </rollingPolicy>
 
     <!-- Safely log to the same file from multiple JVMs. Degrades performance! -->

@@ -149,7 +149,7 @@ SELECT * FROM tests WHERE active = true ORDER BY id DESC LIMIT 10
 
 -- :name get-one-test :? :1
 -- :doc retrieve a test given the id.
-SELECT * FROM tests WHERE id = :id
+SELECT * FROM tests WHERE id = :test-id
 
 -- :name get-questions :? :*
 -- :doc retrieve all questions tests.

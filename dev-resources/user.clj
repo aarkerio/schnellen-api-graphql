@@ -24,7 +24,7 @@
         node))
     m))
 
-(defonce system (system/new-system))
+(defonce system (system/-main))
 
 (defn q
   [query-string]
