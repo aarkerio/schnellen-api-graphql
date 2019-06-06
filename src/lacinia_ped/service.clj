@@ -129,7 +129,6 @@
 (defn print-route
   "Prints a route and its interceptors"
   [rname]
-  (log/info :msg (str ">>> 100 RNAME >>>>> " rname))
   (letfn [(joined-by
             [s coll]
             (apply str (interpose s coll)))

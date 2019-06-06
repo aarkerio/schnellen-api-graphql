@@ -26,7 +26,7 @@
            :question {
                       :description "Question schema."
                       :fields {
-                               :id            {:type (non-null Int)}
+                               :id            {:type (non-null ID)}
                                :question      {:type (non-null String)}
                                :qtype         {:type Int}
                                :hint          {:type String}
