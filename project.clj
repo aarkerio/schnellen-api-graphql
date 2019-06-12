@@ -14,12 +14,12 @@
                  [io.pedestal/pedestal.service "0.5.5"]
                  [io.pedestal/pedestal.jetty "0.5.5"]
                  [mount "0.1.16"]                        ;; managing Clojure and ClojureScript app state
-                 [org.clojure/clojure "1.10.0"]
+                 [org.clojure/clojure "1.10.1"]
                  [org.clojure/data.json "0.2.6"]
                  [org.clojure/java.jdbc "0.7.9"]
                  [org.postgresql/postgresql "42.2.5"]
                  [org.slf4j/jul-to-slf4j "1.7.25"]
-                 [org.slf4j/jcl-over-slf4j "1.7.25"]
+                 [org.slf4j/jcl-over-slf4j "1.7.25"]   ;; JCL 1.2 implemented over SLF4J
                  [org.slf4j/log4j-over-slf4j "1.7.25"]]
   :min-lein-version "2.5.0"
   :main ^{:skip-aot true} lacinia-ped.server

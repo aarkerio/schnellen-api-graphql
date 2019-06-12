@@ -39,8 +39,8 @@
         questions      (db/get-questions { :test-id test-id })
         index-seq      (map #(% :id) questions)   ;; extract sequence
         integrated-q   (attach-questions questions index-seq)
-        _              (log/info :msg (str ">>>  integrated-q  >>>>> " integrated-q))]
-        (assoc full-test :questions [integrated-q])))
+        _              (log/info :msg (str ">>>  5555 integrated-q  >>>>> " integrated-q))]
+        integrated-q))
 
 (defn- ^:private resolve-test-by-id
   [context args value]
