@@ -29,7 +29,7 @@
        (map get-answers)
        (zipmap index-seq)))  ;; add the index
 
-(defn- ^:private resolver-get-questions-by-test
+(defn resolver-get-questions-by-test
   "Resolver to get and convert to map keyed"
   [context args value]
   (let [pre-test-id    (:id args)
@@ -38,9 +38,8 @@
         full-test      (update pre-full-test :id str)
         questions      (db/get-questions { :test-id test-id })
         index-seq      (map #(% :id) questions)   ;; extract sequence
-        integrated-q   (attach-questions questions index-seq)
-        _              (log/info :msg (str ">>>  5555 integrated-q  >>>>> " integrated-q))]
-        integrated-q))
+        integrated-q   (attach-questions questions index-seq)]
+    {:test full-test :questions [questions]}))
 
 (defn- ^:private resolve-test-by-id
   [context args value]
