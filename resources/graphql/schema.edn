@@ -22,11 +22,17 @@
                                :level        {:type Int}
                                :active       {:type Boolean}
                                :shared       {:type Boolean}
-                               :questions    {:type (list :question)}}}
+                               :questions    {:type (list :question_indexed)}}}
+
+           :question_indexed {
+                      :description "Indexed Question schema."
+                      :fields {
+                               :id             {:type (non-null ID)}
+                               :questions      {:type :question}}}
            :question {
                       :description "Question schema."
                       :fields {
-                               :id            {:type (non-null Int)}
+                               :id            {:type (non-null ID)}
                                :question      {:type (non-null String)}
                                :qtype         {:type Int}
                                :hint          {:type String}
@@ -51,8 +57,7 @@
                                :reviewed_fact {:type Boolean}
                                :reviewed_lang {:type Boolean}}}
            }
-
- :queries{
+ :queries {
            :test_by_id {:type (non-null :test)
                         :description "Access a test by its unique id, if it exists."
                         :args {:id {:type ID}}
