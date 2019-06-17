@@ -17,31 +17,30 @@
 (defn- ^:private get-answers
   "Get the answers for each question"
   [question]
-  (let [answers          (db/get-answers {:question-id (:id question)})
-        keys-answers     (map #(assoc % :key (str "keyed-" (:id %))) answers)
-        question-updated (update question :created_at #(helpers/format-time %))]
+  (let [pre-answers       (db/get-answers {:question-id (:id question)})
+        answers           (map #(update % :id str) pre-answers)
+        keys-answers      (map #(assoc % :key (str "keyed-" (:id %))) answers)
+        question-updated  (update question :created_at #(helpers/format-time %))]
     (assoc question-updated :answers keys-answers)))
 
 (defn- ^:private attach-questions
-  "Get the answers for each question"
-  [questions index-seq]
-  (->> questions
-       (map get-answers)
-       (assoc index-seq)))  ;; add the index
+  "Get the questions for the test"
+  [test-id]
+  (log/info :msg (str ">>> test-id ooooo >>>>> " test-id))
+  (let [questions (db/get-questions test-id)]
+    (->> questions
+         (map get-answers)
+         (map #(update % :id str)))))
 
-(defn resolver-get-questions-by-test
+(defn- ^:private resolver-get-questions-by-test
   "Resolver to get and convert to map keyed"
   [context args value]
   (let [pre-test-id    (:id args)
-        test-id        (Integer/parseInt pre-test-id)
-        pre-full-test  (db/get-one-test { :test-id test-id })
-        full-test      (update pre-full-test :id str)
-        questions      (db/get-questions { :test-id test-id })
-        index-seq      (map #(assoc {} :id (str (get % :id))) questions)   ;; extract sequence
-        integrated-q   (attach-questions questions index-seq)
-        _              (log/info :msg (str ">>> KKKK integrated-q QQQQ ****** >>>>> " integrated-q))
-        graph-test     (assoc full-test :questions integrated-q)]
-    graph-test))
+        test-id        { :test-id (Integer/parseInt pre-test-id) }
+        pre-full-test  (db/get-one-test test-id)
+        full-test      (update pre-full-test :id str) ;; Graphql needs string IDs
+        questions      (attach-questions test-id)]
+    (assoc full-test :questions questions)))
 
 (defn- ^:private resolve-test-by-id
   [context args value]

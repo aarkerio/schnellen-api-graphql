@@ -22,13 +22,7 @@
                                :level        {:type Int}
                                :active       {:type Boolean}
                                :shared       {:type Boolean}
-                               :questions    {:type (list :question_indexed)}}}
-
-           :question_indexed {
-                      :description "Indexed Question schema."
-                      :fields {
-                               :id             {:type (non-null ID)}
-                               :questions      {:type :question}}}
+                               :questions    {:type (list :question)}}}
            :question {
                       :description "Question schema."
                       :fields {
@@ -46,16 +40,12 @@
            :answer {
                       :description "Answer schema."
                       :fields {
-                               :id            {:type (non-null Int)}
-                               :question      {:type (non-null String)}
-                               :qtype         {:type Int}
-                               :hint          {:type String}
-                               :explanation   {:type String}
-                               :ordnen        {:type Int}
-                               :user_id       {:type Int}
-                               :created_at    {:type String}
-                               :reviewed_fact {:type Boolean}
-                               :reviewed_lang {:type Boolean}}}
+                               :id        {:type (non-null ID)}
+                               :answer    {:type (non-null String)}
+                               :ordnen    {:type Int}
+                               :correct   {:type Boolean}
+                               :active    {:type Boolean}
+                               }}
            }
  :queries {
            :test_by_id {:type (non-null :test)
