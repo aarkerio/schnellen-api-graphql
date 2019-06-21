@@ -19,7 +19,7 @@
   [question]
   (let [pre-answers       (db/get-answers {:question-id (:id question)})
         answers           (map #(update % :id str) pre-answers)
-        keys-answers      (map #(assoc % :key (str "keyed-" (:id %))) answers)
+        keys-answers      (map #(assoc % :key (str "klappe-" (:id %))) answers)
         question-updated  (update question :created_at #(helpers/format-time %))]
     (assoc question-updated :answers keys-answers)))
 
@@ -30,6 +30,7 @@
   (let [questions (db/get-questions test-id)]
     (->> questions
          (map get-answers)
+         (map #(assoc % :key (str "keyed-" (:id %))))
          (map #(update % :id str)))))
 
 (defn- ^:private resolver-get-questions-by-test
@@ -40,7 +41,8 @@
         pre-full-test  (db/get-one-test test-id)
         full-test      (update pre-full-test :id str) ;; Graphql needs string IDs
         questions      (attach-questions test-id)]
-    (assoc full-test :questions questions)))
+    (log/info :msg (str ">>> TEST >>>>> " full-test))
+    (assoc {} :test full-test :questions questions)))
 
 (defn- ^:private resolve-test-by-id
   [context args value]
