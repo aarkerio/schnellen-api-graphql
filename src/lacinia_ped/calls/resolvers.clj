@@ -56,18 +56,14 @@
 (defn- ^:private create-question!
   [context args value]
   (log/info :msg (str ">>> ARGGSSSS >>>>> " args))
-  ;; (let [full-params (-> params
-  ;;                       (update :qtype   #(Integer/parseInt %))
-  ;;                       (update :test-id #(Integer/parseInt %)))
-  ;;       errors      (val-test/validate-question full-params)]
-  ;;   (if (nil? errors)
-  ;;     (as-> full-params v
-  ;;       (db/create-question! v)
-  ;;       (link-test-question! v (:test-id full-params))
-  ;;       (db/get-last-question {:test-id (:test-id full-params)}))
-  ;;     {:flash errors :ok false})
-    )
-
+  (let [test-id (:test-id args)
+        errors  (val-test/validate-question args)]
+     (if (nil? errors)
+       (as-> args v
+         (db/create-question! v)
+         (link-test-question! v test-id)
+         (db/get-last-question {:test-id test-id}))
+       {:flash errors :ok false})))
 
 (defn resolver-map
   "Public. Match resolvers."
