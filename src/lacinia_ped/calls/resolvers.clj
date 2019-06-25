@@ -47,8 +47,31 @@
         test-id      (Integer/parseInt pre-test-id)]
     (db/get-one-test { :test-id test-id })))
 
+(defn- ^:private get-last-ordnen
+  [table id]
+  (case table
+    "answers"   (db/get-last-ordnen-answer {:question-id id})
+    "questions" (db/get-last-ordnen-questions {:test-id id})))
+
+(defn- ^:private create-question!
+  [context args value]
+  (log/info :msg (str ">>> ARGGSSSS >>>>> " args))
+  ;; (let [full-params (-> params
+  ;;                       (update :qtype   #(Integer/parseInt %))
+  ;;                       (update :test-id #(Integer/parseInt %)))
+  ;;       errors      (val-test/validate-question full-params)]
+  ;;   (if (nil? errors)
+  ;;     (as-> full-params v
+  ;;       (db/create-question! v)
+  ;;       (link-test-question! v (:test-id full-params))
+  ;;       (db/get-last-question {:test-id (:test-id full-params)}))
+  ;;     {:flash errors :ok false})
+    )
+
+
 (defn resolver-map
   "Public. Match resolvers."
   [component]
   {:test-by-id (partial resolve-test-by-id)
-   :questions-by-test (partial resolver-get-questions-by-test)})
+   :questions-by-test (partial resolver-get-questions-by-test)
+   :add-question (partial create-question!)})
