@@ -35,7 +35,6 @@
                       :fields {
                                :id            {:type (non-null ID)}
                                :question      {:type (non-null String)}
-                               :key           {:type String}
                                :qtype         {:type Int}
                                :hint          {:type String}
                                :explanation   {:type String}
@@ -50,7 +49,6 @@
                       :fields {
                                :id        {:type (non-null ID)}
                                :answer    {:type (non-null String)}
-                               :key       {:type String}
                                :ordnen    {:type Int}
                                :correct   {:type Boolean}
                                :active    {:type Boolean}

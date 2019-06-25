@@ -19,18 +19,15 @@
   [question]
   (let [pre-answers       (db/get-answers {:question-id (:id question)})
         answers           (map #(update % :id str) pre-answers)
-        keys-answers      (map #(assoc % :key (str "klappe-" (:id %))) answers)
         question-updated  (update question :created_at #(helpers/format-time %))]
-    (assoc question-updated :answers keys-answers)))
+    (assoc question-updated :answers answers)))
 
 (defn- ^:private attach-questions
   "Get the questions for the test"
   [test-id]
-  (log/info :msg (str ">>> test-id ooooo >>>>> " test-id))
   (let [questions (db/get-questions test-id)]
     (->> questions
          (map get-answers)
-         (map #(assoc % :key (str "keyed-" (:id %))))
          (map #(update % :id str)))))
 
 (defn- ^:private resolver-get-questions-by-test
