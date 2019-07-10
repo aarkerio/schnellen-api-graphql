@@ -41,6 +41,7 @@
                                :ordnen        {:type Int}
                                :user_id       {:type Int}
                                :created_at    {:type String}
+                               :active        {:type Boolean}
                                :reviewed_fact {:type Boolean}
                                :reviewed_lang {:type Boolean}
                                :answers       {:type (list :answer)}}}
@@ -72,6 +73,7 @@
                         :qtype {:type (non-null Int)
                                 :description "Type of question"}
                         :test_id {:type Int}
+                        :user_id {:type (non-null Int)}
                         }
                  :resolve :add-question}
   }

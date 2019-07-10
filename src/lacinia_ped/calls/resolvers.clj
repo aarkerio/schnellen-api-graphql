@@ -53,16 +53,27 @@
     "answers"   (db/get-last-ordnen-answer {:question-id id})
     "questions" (db/get-last-ordnen-questions {:test-id id})))
 
+(defn- ^:private link-test-question!
+  [last-question test-id]
+  (let [question-id (get-in (first last-question) [:id])
+        next-ordnen (or (:ordnen (get-last-ordnen "questions" test-id)) 0)]
+    (db/create-question-test! {:question-id question-id :test-id test-id :ordnen (inc next-ordnen)})))
+
+(defn- ^:private id-to-string
+  [my-map]
+  (update my-map :id str))
+
 (defn- ^:private create-question!
   [context args value]
-  (log/info :msg (str ">>> ARGGSSSS >>>>> " args))
-  (let [test-id (:test-id args)
-        errors  (val-test/validate-question args)]
+  (let [full-args (assoc args :active true)
+        test-id   (:test_id args)
+        errors  (val-test/validate-question full-args)]
      (if (nil? errors)
-       (as-> args v
-         (db/create-question! v)
-         (link-test-question! v test-id)
-         (db/get-last-question {:test-id test-id}))
+       (do
+         (as-> full-args v
+             (db/create-question! v)
+             (link-test-question! v test-id))
+           (id-to-string (db/get-last-question {:test-id test-id})))
        {:flash errors :ok false})))
 
 (defn resolver-map
