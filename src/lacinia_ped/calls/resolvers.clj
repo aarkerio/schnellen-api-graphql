@@ -1,6 +1,7 @@
 (ns lacinia-ped.calls.resolvers
   (:require [clojure.java.io :as io]
             [clojure.edn :as edn]
+            [com.walmartlabs.lacinia.resolve :refer [resolve-as]]
             [io.pedestal.log :as log]
             [lacinia-ped.db.core :as db]
             [lacinia-ped.libs.helpers :as helpers]
@@ -38,7 +39,6 @@
         pre-full-test  (db/get-one-test test-id)
         full-test      (update pre-full-test :id str) ;; Graphql needs string IDs
         questions      (attach-questions test-id)]
-    (log/info :msg (str ">>> TEST >>>>> " full-test))
     (assoc {} :test full-test :questions questions)))
 
 (defn- ^:private resolve-test-by-id
@@ -67,14 +67,15 @@
   [context args value]
   (let [full-args (assoc args :active true)
         test-id   (:test_id args)
-        errors  (val-test/validate-question full-args)]
-     (if (nil? errors)
-       (do
-         (as-> full-args v
-             (db/create-question! v)
-             (link-test-question! v test-id))
-           (id-to-string (db/get-last-question {:test-id test-id})))
-       {:flash errors :ok false})))
+        _         (log/info :msg (str ">>> full-args >>>>> " full-args))
+        errors    (val-test/validate-question full-args)]
+    (if (nil? errors)
+      (do
+        (as-> full-args v
+          (db/create-question! v)
+          (link-test-question! v test-id))
+        (id-to-string (db/get-last-question {:test-id test-id})))
+      (resolve-as nil {:message "Question not saved." :status 404 :ok false}))))
 
 (defn resolver-map
   "Public. Match resolvers."

@@ -63,18 +63,16 @@
                                :description "Access a test's questions by its unique id, if it exists."
                                :args        {:id {:type ID}}
                                :resolve     :questions-by-test}}
-
- :mutations
- {:add_question {:type :question
-                 :description "Add question."
-                 :args {:question {:type (non-null String)}
-                        :hint {:type String}
-                        :explanation {:type String}
-                        :qtype {:type (non-null Int)
-                                :description "Type of question"}
-                        :test_id {:type Int}
-                        :user_id {:type (non-null Int)}
-                        }
-                 :resolve :add-question}
-  }
+ :mutations {
+             :add_question {:type :question
+                            :description "Create new question."
+                            :args {:question    {:type (non-null String)}
+                                   :hint        {:type String}
+                                   :explanation {:type String}
+                                   :qtype       {:type (non-null Int)
+                                                 :description "Type of question"}
+                                   :test_id     {:type Int}
+                                   :user_id     {:type (non-null Int)}
+                                   }
+                            :resolve :add-question}}
 }
