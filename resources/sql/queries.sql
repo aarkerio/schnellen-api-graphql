@@ -103,7 +103,7 @@ INSERT INTO tests (title, tags, user_id) VALUES (:title, :tags, :user-id)
 -- :name create-question! :<!
 -- :doc creates a new question record
 INSERT INTO questions (question, qtype, hint, explanation, active, user_id)
-VALUES (:question, :qtype, :hint, :explanation, :active, :user-id) returning id
+VALUES (:question, :qtype, :hint, :explanation, :active, :user_id) returning id
 
 -- :name update-question! :! :affected
 -- :doc updates a question record

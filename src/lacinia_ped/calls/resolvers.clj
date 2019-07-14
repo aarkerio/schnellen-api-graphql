@@ -1,6 +1,7 @@
 (ns lacinia-ped.calls.resolvers
   (:require [clojure.java.io :as io]
             [clojure.edn :as edn]
+            [com.walmartlabs.lacinia.resolve :refer [resolve-as]]
             [io.pedestal.log :as log]
             [lacinia-ped.db.core :as db]
             [lacinia-ped.libs.helpers :as helpers]
@@ -17,30 +18,28 @@
 (defn- ^:private get-answers
   "Get the answers for each question"
   [question]
-  (let [answers          (db/get-answers {:question-id (:id question)})
-        keys-answers     (map #(assoc % :key (str "keyed-" (:id %))) answers)
-        question-updated (update question :created_at #(helpers/format-time %))]
-    (assoc question-updated :answers keys-answers)))
+  (let [pre-answers       (db/get-answers {:question-id (:id question)})
+        answers           (map #(update % :id str) pre-answers)
+        question-updated  (update question :created_at #(helpers/format-time %))]
+    (assoc question-updated :answers answers)))
 
 (defn- ^:private attach-questions
-  "Get the answers for each question"
-  [questions index-seq]
-  (->> questions
-       (map get-answers)
-       (zipmap index-seq)))  ;; add the index
+  "Get the questions for the test"
+  [test-id]
+  (let [questions (db/get-questions test-id)]
+    (->> questions
+         (map get-answers)
+         (map #(update % :id str)))))
 
 (defn- ^:private resolver-get-questions-by-test
   "Resolver to get and convert to map keyed"
   [context args value]
   (let [pre-test-id    (:id args)
-        test-id        (Integer/parseInt pre-test-id)
-        pre-full-test  (db/get-one-test { :test-id test-id })
-        full-test      (update pre-full-test :id str)
-        questions      (db/get-questions { :test-id test-id })
-        index-seq      (map #(% :id) questions)   ;; extract sequence
-        integrated-q   (attach-questions questions index-seq)
-        _              (log/info :msg (str ">>>  integrated-q  >>>>> " integrated-q))]
-        (assoc full-test :questions [integrated-q])))
+        test-id        { :test-id (Integer/parseInt pre-test-id) }
+        pre-full-test  (db/get-one-test test-id)
+        full-test      (update pre-full-test :id str) ;; Graphql needs string IDs
+        questions      (attach-questions test-id)]
+    (assoc {} :test full-test :questions questions)))
 
 (defn- ^:private resolve-test-by-id
   [context args value]
@@ -48,8 +47,39 @@
         test-id      (Integer/parseInt pre-test-id)]
     (db/get-one-test { :test-id test-id })))
 
+(defn- ^:private get-last-ordnen
+  [table id]
+  (case table
+    "answers"   (db/get-last-ordnen-answer {:question-id id})
+    "questions" (db/get-last-ordnen-questions {:test-id id})))
+
+(defn- ^:private link-test-question!
+  [last-question test-id]
+  (let [question-id (get-in (first last-question) [:id])
+        next-ordnen (or (:ordnen (get-last-ordnen "questions" test-id)) 0)]
+    (db/create-question-test! {:question-id question-id :test-id test-id :ordnen (inc next-ordnen)})))
+
+(defn- ^:private id-to-string
+  [my-map]
+  (update my-map :id str))
+
+(defn- ^:private create-question!
+  [context args value]
+  (let [full-args (assoc args :active true)
+        test-id   (:test_id args)
+        _         (log/info :msg (str ">>> full-args >>>>> " full-args))
+        errors    (val-test/validate-question full-args)]
+    (if (nil? errors)
+      (do
+        (as-> full-args v
+          (db/create-question! v)
+          (link-test-question! v test-id))
+        (id-to-string (db/get-last-question {:test-id test-id})))
+      (resolve-as nil {:message "Question not saved." :status 404 :ok false}))))
+
 (defn resolver-map
   "Public. Match resolvers."
   [component]
   {:test-by-id (partial resolve-test-by-id)
-   :questions-by-test (partial resolver-get-questions-by-test)})
+   :questions-by-test (partial resolver-get-questions-by-test)
+   :add-question (partial create-question!)})
