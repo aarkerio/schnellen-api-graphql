@@ -30,6 +30,11 @@
                                :level        {:type Int}
                                :active       {:type Boolean}
                                :shared       {:type Boolean}}}
+           :ided_question {
+                           :description "Question with ID"
+                           :fields {
+                                    :id  {:type (non-null ID)}
+                                    :question {:type :question}}}
            :question {
                       :description "Question schema."
                       :fields {
