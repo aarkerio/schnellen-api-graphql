@@ -35,6 +35,7 @@
   "Resolver to get and convert to map keyed"
   [context args value]
   (let [pre-test-id    (:id args)
+        _              (log/info :msg (str ">>> args >>>>> " args))
         test-id        { :test-id (Integer/parseInt pre-test-id) }
         pre-full-test  (db/get-one-test test-id)
         full-test      (update pre-full-test :id str) ;; Graphql needs string IDs
